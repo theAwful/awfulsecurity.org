@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Awful Security — Jay Koziol</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #1a1a1a;
+    --card: #222222;
+    --border: #333333;
+    --text: #d4d0ca;
+    --muted: #888880;
+    --accent: #e05a2b;
+    --mono: 'Courier New', Courier, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.7;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* NAV */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 0 32px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .site-name {
+    font-family: var(--mono);
+    font-size: 15px;
+    color: var(--accent);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 13px;
+    color: var(--muted);
+    text-decoration: none;
+  }
+
+  .nav-links a:hover { color: var(--text); }
+
+  /* HEADER */
+  .site-header {
+    margin-bottom: 56px;
+  }
+
+  .site-header h1 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .site-header p {
+    font-size: 14px;
+    color: var(--muted);
+    max-width: 520px;
+  }
+
+  /* POSTS */
+  .post {
+    margin-bottom: 0;
+    border-top: 1px solid var(--border);
+    padding: 36px 0;
+  }
+
+  .post:last-child {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .post-meta {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .post-meta .tag {
+    color: var(--accent);
+  }
+
+  .post h2 {
+    font-size: 19px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    cursor: pointer;
+    line-height: 1.35;
+  }
+
+  .post h2:hover { color: var(--accent); }
+
+  .post-preview {
+    font-size: 14px;
+    color: var(--muted);
+    margin-bottom: 14px;
+    line-height: 1.65;
+  }
+
+  .toggle-btn {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .toggle-btn:hover { opacity: 0.7; }
+
+  /* FULL POST BODY */
+  .post-body {
+    display: none;
+    margin-top: 28px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .post-body.open { display: block; }
+
+  .post-body p {
+    font-size: 15px;
+    color: #bcb8b1;
+    line-height: 1.8;
+    margin-bottom: 18px;
+  }
+
+  .post-body h3 {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 28px 0 12px;
+  }
+
+  .post-body blockquote {
+    border-left: 3px solid var(--border);
+    margin: 24px 0;
+    padding: 2px 20px;
+    font-size: 14px;
+    color: var(--muted);
+    font-style: italic;
+    line-height: 1.65;
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 64px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  footer a { color: var(--muted); text-decoration: none; }
+  footer a:hover { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="site-name" href="#">awfulsecurity.org</a>
+  <ul class="nav-links">
+    <li><a href="#posts">posts</a></li>
+    <li><a href="https://github.com/theAwful">github</a></li>
+    <li><a href="https://linkedin.com/in/jaykoziol">linkedin</a></li>
+  </ul>
+</nav>
+
+<div class="site-header">
+  <h1>Awful Security</h1>
+  <p>AppSec and offensive security notes from Jay Koziol. Mostly about what goes wrong and why.</p>
+</div>
+
+<div id="posts">
+
+  <!-- POST 1 -->
+  <article class="post">
+    <div class="post-meta">
+      <span>Jun 2026</span>
+      <span class="tag">#cicd #appsec</span>
+    </div>
+    <h2 onclick="toggle('p1')">Your SAST/DAST pipeline is probably lying to you</h2>
+    <p class="post-preview">I've done assessments on apps with active SAST and DAST in their pipeline and still found critical stuff in the first hour. The tools were running. They just weren't set up to find anything real.</p>
+    <button class="toggle-btn" onclick="toggle('p1')">read more ↓</button>
+    <div class="post-body" id="p1">
+      <p>I was on an engagement a while back, maybe 30 minutes into going through findings with the dev lead, and he stops me and goes "wait, our pipeline already scans for that." I just kind of said yeah probably, and kept going. Because the pipeline scanning for something and actually catching it are two different things, and I was pretty sure which one this was.</p>
+
+      <p>This is one of the more frustrating things I run into doing appsec work. Teams wire Semgrep or SonarQube into their CI, they get green checkmarks on PRs, security shows up in the compliance doc — and then I show up and find an IDOR that's been sitting there for who knows how long. Not because the tools can't find IDORs. They can, if you actually set them up for it. But nobody wrote a custom rule for how that specific app handles auth, so it just passed every time.</p>
+
+      <p>Default rulesets are written to cover everything which kind of means they cover nothing particularly well. You get flooded with low and informational findings that don't really apply to your codebase, devs learn to tune it out, and now the one critical that mattered is somewhere in a pile nobody's reading. I've seen teams where scanner output is basically treated as noise at this point. That's honestly worse than not running it, because at least then nobody thinks they're covered.</p>
+
+      <blockquote>The most dangerous misconfigured scanner is the one everyone assumes is working fine.</blockquote>
+
+      <h3>DAST is where things really fall apart</h3>
+
+      <p>At least SAST is dealing with code you own. DAST is trying to actively probe a running application and there are like five ways that can silently fail without you knowing.</p>
+
+      <p>Most common thing I see: teams running their scanner against a test environment that doesn't actually look like production. Different data, different auth flows, some endpoints just aren't deployed there. Scanner covers maybe 40% of the real surface, reports clean, everyone moves on.</p>
+
+      <p>Then there's authenticated scanning. Tools like Acunetix and Burp's automated stuff do support it, but actually making it work — keeping session state alive, handling token refresh, not getting rate limited two minutes in and spending the rest of the run crawling the login page — that's real work someone has to do. I've looked at DAST jobs that were technically running authenticated where the session was clearly dead almost immediately. Job still showed green. Nobody noticed.</p>
+
+      <h3>What actually helps</h3>
+
+      <p>Write custom SAST rules for your actual app's patterns, especially around auth. A rule that understands how your specific application handles authorization is worth more than 400 generic ones that don't know anything about your codebase. And before you set up a blocking gate on criticals, figure out what your false positive rate actually is — because if it's bad, devs will just suppress everything to get PRs through and you've lost.</p>
+
+      <p>For DAST: test that your test works. Intentionally drop a known vulnerability into a branch, run the scanner, see if it catches it. Do this before you trust the results. I've done this on internal stuff and the results are sometimes pretty humbling. Better to find out the authenticated scan is broken in staging than after six months of reporting clean.</p>
+    </div>
+  </article>
+
+  <!-- POST 2 -->
+  <article class="post">
+    <div class="post-meta">
+      <span>May 2026</span>
+      <span class="tag">#tooling #vibecheck</span>
+    </div>
+    <h2 onclick="toggle('p2')">What happens when you vibe code a full-stack app with no plan</h2>
+    <p class="post-preview">I built ForSight mostly in Cursor with no SRS doc, no real architecture plan, just me describing things to an AI and seeing what came out. Here's where that went sideways.</p>
+    <button class="toggle-btn" onclick="toggle('p2')">read more ↓</button>
+    <div class="post-body" id="p2">
+      <p>I want to be upfront: I'm not really a developer. I write code, I've built things, but my background is security not software engineering. So when I decided to build ForSight — a pentest orchestration platform that handles engagements from scoping through reporting and streams tool output in real time — the smart move probably would've been to write out an SRS, figure out the data model first, sketch the architecture. I did not do that.</p>
+
+      <p>What I did was open Cursor and start describing what I wanted. And honestly that works pretty well at first. You can get a lot done fast when you're telling an AI what you need and it's writing most of the code. Early stuff came together quicker than I expected. Basic UI, backend scaffolding, got the tool execution layer going. I was feeling pretty good about the approach.</p>
+
+      <p>And then I tried to integrate Selenium.</p>
+
+      <h3>The Selenium situation</h3>
+
+      <p>The plan was to use Selenium for some browser automation inside the platform. Seemed reasonable. And this is where the "vibing a complex integration with no architecture doc" thing started to really show its problems.</p>
+
+      <p>The back and forth with Cursor on this was rough. Not because it was giving bad answers — it wasn't — but because I hadn't set up the architecture in a way that made plugging Selenium in cleanly. It kept touching other stuff. We'd get the Selenium piece working and something else would break. Fix that, something else breaks. Classic thing where you're not really solving problems, you're just moving them around.</p>
+
+      <p>Looking back at it, the root cause is pretty obvious: I never had a clear picture of the whole system before I started building parts of it. Cursor is genuinely good at building the thing you describe. It has no idea what you meant to build. Every session was starting fresh with a different chunk of context, and different parts of the app weren't necessarily talking to each other in a coherent way because nobody — me or the AI — had ever looked at the whole thing at once.</p>
+
+      <blockquote>Agentic AI is really good at building what you describe. It has no idea what you meant to build.</blockquote>
+
+      <h3>What vibe coding actually costs you</h3>
+
+      <p>The speed is real. I built stuff in days that would've taken a lot longer the normal way. But the debt accumulates fast. Inconsistent patterns across different parts of the app because different sessions had different context. State management that made sense when I described it but didn't fit the other pieces. Documentation that was basically nonexistent because neither me nor the AI was writing it.</p>
+
+      <p>Every complex integration got harder than it should've been because there was no ground truth document I could hand to Cursor and say "here's how this system actually works, now add this." I was re-explaining context every session, sometimes getting it slightly wrong, and then the AI was confidently building on a wrong assumption I wouldn't catch for a while.</p>
+
+      <h3>What I'd do differently</h3>
+
+      <p>Spend a few hours upfront writing down what the system is supposed to do and how the main pieces connect. Not a full SRS — I'm not going to pretend I'm going to write a full SRS — but something that says "here's the data model, here's how a finding moves from creation to the report, here's where tool output goes." Something I can paste into Cursor at the start of a session so it has actual context for the whole system.</p>
+
+      <p>The Selenium integration eventually worked. But if I'd had that document from the start I think we'd have gotten there in a couple hours instead of a couple days of going in circles. Lesson learned. Will I fully apply it next time? Probably not. But I know it now.</p>
+    </div>
+  </article>
+
+  <!-- POST 3 -->
+  <article class="post">
+    <div class="post-meta">
+      <span>Apr 2026</span>
+      <span class="tag">#dast #ai</span>
+    </div>
+    <h2 onclick="toggle('p3')">What AI is actually going to do to DAST and pentesting</h2>
+    <p class="post-preview">Burp has AI features now. Autonomous pentesting agents are a real thing. Models like Mythos are showing what's coming. Here's an honest take on where things are versus where people think they are.</p>
+    <button class="toggle-btn" onclick="toggle('p3')">read more ↓</button>
+    <div class="post-body" id="p3">
+      <p>I've been watching the AI in security tooling space pretty closely and I want to give an honest take on where things actually are, because where they are and where people think they are is pretty different right now.</p>
+
+      <p>Starting with what exists. Burp added Burp AI in early 2025 and I've used it some. The features that shipped are genuinely useful but pretty targeted — better false positive reduction on access control findings, AI-assisted analysis in Repeater, the ability to build AI-powered extensions through the Montoya API. It's not autonomous. It's not doing the testing for you. It makes some of the annoying parts of the workflow a little less annoying. The FP reduction on access control stuff is actually helpful because that's historically been noisy. But it runs on credits that expire, can't be pooled across users, and burns depending on request complexity. More of a quality of life improvement on a tool you're already using than some kind of shift.</p>
+
+      <p>There are also actual autonomous pentesting agents now. PentAGI, NodeZero, a bunch of research papers out of universities doing LLM-based pentest agents. Some of these are doing real things — running enum, correlating findings with CVE databases, generating and testing payloads, writing reports. The research in this space moved fast in 2025. But when you look at where they do well versus where they fall apart, the gap is pretty clear: they're good at known vuln classes in environments that look like the training data, and they lose the thread fast when an application has any real custom logic going on.</p>
+
+      <blockquote>The hard part of pentesting isn't finding SQL injections. It's understanding how this specific app thinks about authorization and then figuring out how to break that.</blockquote>
+
+      <h3>What the frontier models suggest is coming</h3>
+
+      <p>I can't say a ton about Claude Mythos specifically — it's not public, it's being used by a small group of trusted orgs through Anthropic's Project Glasswing and the details aren't really out there. But what the frontier models in general are showing is that the reasoning gap is closing faster than most people expected. Models are getting noticeably better at multi-step reasoning, holding complex context across a session, and doing things that actually require understanding how a system works rather than just matching to known vulnerability patterns.</p>
+
+      <p>That matters for DAST specifically because the current ceiling on automated security testing is basically "can it reason about application logic." Scanners are good at finding known patterns. They are not good at figuring out that this endpoint is supposed to be admin-only and then actually testing all the ways a regular user might reach it. That requires understanding intent, not just signatures. Better reasoning models change that equation.</p>
+
+      <h3>What I think actually happens</h3>
+
+      <p>My honest take: AI handles the coverage and volume work pretty well in the next couple years. Automated crawling, auth flow handling, common vuln class coverage — the stuff that's tedious and time-consuming but not where the interesting findings come from anyway. The stuff that takes longer to automate than people are predicting is business logic testing, creative chaining of low-severity findings into something actually critical, and understanding what a finding means in a specific client's context.</p>
+
+      <p>The people who are going to feel this first are the ones whose whole value is running scanners and writing up the output. That's getting automated. The ones who do fine are probably the ones who can do the thing AI still can't — actually understand the system, ask the weird questions, figure out what the developers were thinking when they built the auth flow and where that thinking went wrong.</p>
+
+      <p>The more interesting question to me is what happens when AI gets good enough to do authenticated testing reliably and actually model authorization logic across a whole application. Because at that point the line between automated DAST and autonomous pentesting gets pretty blurry. Whether that's one year or five years away, I don't know. But the direction seems pretty obvious from where I'm sitting.</p>
+    </div>
+  </article>
+
+</div>
+
+<footer>
+  Jay Koziol &mdash; CISSP, OSWE, OSCP, OSEP, CRTO &mdash;
+  <a href="https://github.com/theAwful">github</a> &mdash;
+  <a href="https://linkedin.com/in/jaykoziol">linkedin</a>
+</footer>
+
+<script>
+  function toggle(id) {
+    var el = document.getElementById(id);
+    var open = el.classList.toggle('open');
+    el.parentElement.querySelector('.toggle-btn').textContent = open ? 'collapse ↑' : 'read more ↓';
+  }
+</script>
+
+</body>
+</html>
