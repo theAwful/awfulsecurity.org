@@ -211,67 +211,65 @@
     <p class="post-preview">I've done assessments on apps with active SAST and DAST in their pipeline and still found critical stuff in the first hour. The tools were running. They just weren't set up to find anything real.</p>
     <button class="toggle-btn" onclick="toggle('p1')">read more ↓</button>
     <div class="post-body" id="p1">
-      <p>I was on an engagement a while back, maybe 30 minutes into going through findings with the dev lead, and he stops me and goes "wait, our pipeline already scans for that." I just kind of said yeah probably, and kept going. Because the pipeline scanning for something and actually catching it are two different things, and I was pretty sure which one this was.</p>
+      <p>I was on an engagement a while back with a client going over an IDOR finding in a Go app and he stops me and goes "wait, our pipeline already scans for that." This ended up leading to a lengthy discussion because the pipeline scanning for something and actually catching it are two different things, and I was pretty sure which one this was.</p>
 
-      <p>This is one of the more frustrating things I run into doing appsec work. Teams wire Semgrep or SonarQube into their CI, they get green checkmarks on PRs, security shows up in the compliance doc — and then I show up and find an IDOR that's been sitting there for who knows how long. Not because the tools can't find IDORs. They can, if you actually set them up for it. But nobody wrote a custom rule for how that specific app handles auth, so it just passed every time.</p>
+      <p>This is one of the more frustrating things I run into doing appsec work. Teams wire Semgrep or CodeQL into their CI, they get green checkmarks on PRs, security shows up in the compliance doc and then I show up and find an IDOR that's been sitting there for who knows how long. Not because the tools can't find IDORs. They can, if you actually set them up for it. But nobody wrote a custom rule for how that specific app handles auth, so it just passed every time.</p>
 
-      <p>Default rulesets are written to cover everything which kind of means they cover nothing particularly well. You get flooded with low and informational findings that don't really apply to your codebase, devs learn to tune it out, and now the one critical that mattered is somewhere in a pile nobody's reading. I've seen teams where scanner output is basically treated as noise at this point. That's honestly worse than not running it, because at least then nobody thinks they're covered.</p>
-
-      <blockquote>The most dangerous misconfigured scanner is the one everyone assumes is working fine.</blockquote>
+      <p>Default rulesets are written to cover everything which kind of means they cover nothing particularly well. You get flooded with low and informational findings that don't really apply to your codebase, devs learn to tune it out, and now the one critical that mattered is somewhere in a pile nobody's reading. Scanner output is basically treated as noise at this point. That's honestly worse than not running it, because at least then nobody thinks they're covered.</p>
 
       <h3>DAST is where things really fall apart</h3>
 
-      <p>At least SAST is dealing with code you own. DAST is trying to actively probe a running application and there are like five ways that can silently fail without you knowing.</p>
+      <p>At least SAST is dealing with code you own. DAST is trying to actively probe a running application and there are a ton of ways that can silently fail without you knowing.</p>
 
-      <p>Most common thing I see: teams running their scanner against a test environment that doesn't actually look like production. Different data, different auth flows, some endpoints just aren't deployed there. Scanner covers maybe 40% of the real surface, reports clean, everyone moves on.</p>
+      <p>Most common thing I see is teams running their scanner against a test environment that doesn't actually look like production. Different data, different auth flows, some endpoints just aren't deployed there. Scanner covers a fraction of the real surface, reports clean, everyone moves on.</p>
 
-      <p>Then there's authenticated scanning. Tools like Acunetix and Burp's automated stuff do support it, but actually making it work — keeping session state alive, handling token refresh, not getting rate limited two minutes in and spending the rest of the run crawling the login page — that's real work someone has to do. I've looked at DAST jobs that were technically running authenticated where the session was clearly dead almost immediately. Job still showed green. Nobody noticed.</p>
+      <p>Then there's authenticated scanning. Tools like Acunetix and Burp's automated stuff do support it, but actually making it work and keeping session state alive, handling token refresh, not getting rate limited two minutes in and spending the rest of the run crawling the login page ... that's real work someone has to do. I've looked at DAST jobs that were technically running authenticated where the session was clearly dead almost immediately. Job still showed green. Nobody noticed.. or you dont get a true picture of findings in the app./</p>
 
       <h3>What actually helps</h3>
 
-      <p>Write custom SAST rules for your actual app's patterns, especially around auth. A rule that understands how your specific application handles authorization is worth more than 400 generic ones that don't know anything about your codebase. And before you set up a blocking gate on criticals, figure out what your false positive rate actually is — because if it's bad, devs will just suppress everything to get PRs through and you've lost.</p>
+      <p>Write custom SAST rules for your actual app's patterns, especially around auth. A rule that understands how your specific application handles authorization is worth more than a bunch of generic ones that don't know anything about your codebase. And before you set up a blocking gate on criticals, figure out what your false positive rate actually is, because if it's bad, devs will just suppress everything to get PRs through and you've lost.</p>
 
-      <p>For DAST: test that your test works. Intentionally drop a known vulnerability into a branch, run the scanner, see if it catches it. Do this before you trust the results. I've done this on internal stuff and the results are sometimes pretty humbling. Better to find out the authenticated scan is broken in staging than after six months of reporting clean.</p>
+      <p>For DAST: test that your test works. Intentionally drop a known vulnerability into a branch, run the scanner, see if it catches it. Do this before you trust the results. I've done this on internal stuff and the results are usually pretty good. Better to find out the authenticated scan is broken in staging than after six months of reporting clean..</p>
     </div>
   </article>
 
   <!-- POST 2 -->
   <article class="post">
-    <div class="post-meta">
+    <div class="postmeta">
       <span>May 2026</span>
       <span class="tag">#tooling #vibecheck</span>
     </div>
-    <h2 onclick="toggle('p2')">What happens when you vibe code a full-stack app with no plan</h2>
-    <p class="post-preview">I built ForSight mostly in Cursor with no SRS doc, no real architecture plan, just me describing things to an AI and seeing what came out. Here's where that went sideways.</p>
-    <button class="toggle-btn" onclick="toggle('p2')">read more ↓</button>
-    <div class="post-body" id="p2">
-      <p>I want to be upfront: I'm not really a developer. I write code, I've built things, but my background is security not software engineering. So when I decided to build ForSight — a pentest orchestration platform that handles engagements from scoping through reporting and streams tool output in real time — the smart move probably would've been to write out an SRS, figure out the data model first, sketch the architecture. I did not do that.</p>
+    <h2 onclick="toggle('p2')">What happens when you vibe code a fullstack app with no plan</h2>
+    <p class="postpreview">I built ForSight mostly in Cursor with no SRS doc, no real architecture plan, just me describing things to an AI and seeing what came out. Here's where that went sideways.</p>
+    <button class="togglebtn" onclick="toggle('p2')">read more ↓</button>
+    <div class="postbody" id="p2">
+      <p>I want to be upfront, I'm not really a developer by any means, though it would be pretty cool. I write code, I've built things, but my background is security not software engineering. So when I decided to build ForSight the smart move probably would've been to write out an SRS, figure out the data models first, sketch the architecture. But of course... I did not do that.</p>
 
-      <p>What I did was open Cursor and start describing what I wanted. And honestly that works pretty well at first. You can get a lot done fast when you're telling an AI what you need and it's writing most of the code. Early stuff came together quicker than I expected. Basic UI, backend scaffolding, got the tool execution layer going. I was feeling pretty good about the approach.</p>
+      <p>What I did was open Cursor and start describing what I wanted. And honestly that works pretty well at first. You can get a lot done fast when you're telling an AI what you need and it's writing most of the code. Early stuff came together quicker than I expected. Basic UI, backend DBs, got the tooling runners going. I was feeling pretty good about the approach.</p>
 
       <p>And then I tried to integrate Selenium.</p>
 
       <h3>The Selenium situation</h3>
 
-      <p>The plan was to use Selenium for some browser automation inside the platform. Seemed reasonable. And this is where the "vibing a complex integration with no architecture doc" thing started to really show its problems.</p>
+      <p>The plan was to use Selenium for some browser automation inside the platform that would scrape out internal Nessus box. Seemed reasonable. And this is where the "vibing a complex integration with no architecture doc" thing started to really show its problems.</p>
 
-      <p>The back and forth with Cursor on this was rough. Not because it was giving bad answers — it wasn't — but because I hadn't set up the architecture in a way that made plugging Selenium in cleanly. It kept touching other stuff. We'd get the Selenium piece working and something else would break. Fix that, something else breaks. Classic thing where you're not really solving problems, you're just moving them around.</p>
+      <p>The back and forth with Cursor on this was rough. Not because it was giving bad answers (it wasn't) but because I hadn't set up the architecture in a way that made plugging Selenium in cleanly. It kept touching other stuff. I'd get the Selenium piece working and something else would break. Fix that, something else breaks. Classic thing where you're not really solving problems, you're just moving them around. It honestly got to the point where I was going to throw the whole project in the garbage.</p>
 
-      <p>Looking back at it, the root cause is pretty obvious: I never had a clear picture of the whole system before I started building parts of it. Cursor is genuinely good at building the thing you describe. It has no idea what you meant to build. Every session was starting fresh with a different chunk of context, and different parts of the app weren't necessarily talking to each other in a coherent way because nobody — me or the AI — had ever looked at the whole thing at once.</p>
+      <p>Looking back at it now though, the root cause is pretty obvious: I never had a clear picture of the whole system before I started to actually build it. While Cursor is genuinely good at building the thing you describe, tt has no idea what you MEANT to build. Every session was starting fresh with a different chunk of context, and different parts of the app weren't necessarily talking to each other in a coherent way because the AI had ever looked at the whole thing at once.</p>
 
       <blockquote>Agentic AI is really good at building what you describe. It has no idea what you meant to build.</blockquote>
 
       <h3>What vibe coding actually costs you</h3>
 
-      <p>The speed is real. I built stuff in days that would've taken a lot longer the normal way. But the debt accumulates fast. Inconsistent patterns across different parts of the app because different sessions had different context. State management that made sense when I described it but didn't fit the other pieces. Documentation that was basically nonexistent because neither me nor the AI was writing it.</p>
+      <p>The speed is real. I built stuff in days that would've taken a lot longer the normal way. But the tech debt accumulates fast. Inconsistent patterns across different parts of the app because different sessions had different context. State management that made sense when I described it but didn't fit the other pieces. Documentation that was basically nonexistent because neither me nor the AI was writing it.</p>
 
-      <p>Every complex integration got harder than it should've been because there was no ground truth document I could hand to Cursor and say "here's how this system actually works, now add this." I was re-explaining context every session, sometimes getting it slightly wrong, and then the AI was confidently building on a wrong assumption I wouldn't catch for a while.</p>
+      <p>Every complex integration got harder than it should've been because there was no ground truth document I could hand to Cursor and say "here's how this system actually works, now add this." I was reexplaining context every session, sometimes getting it slightly wrong, and then the AI was confidently building on a wrong assumption I wouldn't catch for a while.</p>
 
       <h3>What I'd do differently</h3>
 
-      <p>Spend a few hours upfront writing down what the system is supposed to do and how the main pieces connect. Not a full SRS — I'm not going to pretend I'm going to write a full SRS — but something that says "here's the data model, here's how a finding moves from creation to the report, here's where tool output goes." Something I can paste into Cursor at the start of a session so it has actual context for the whole system.</p>
+      <p>Spend a few hours upfront writing down what the system is supposed to do and how the main pieces connect. Maybe not quite a full SRS, but perhaps something that says "here's the data model, here's how a finding moves from creation to the report, here's where tool output goes." Something I can paste into Cursor at the start of a session so it has actual context for the whole system.</p>
 
-      <p>The Selenium integration eventually worked. But if I'd had that document from the start I think we'd have gotten there in a couple hours instead of a couple days of going in circles. Lesson learned. Will I fully apply it next time? Probably not. But I know it now.</p>
+      <p>The Selenium integration eventually worked. But if I'd had that document from the start I think we'd have gotten there in a couple hours instead of a couple days of going in circles. Lesson learned. Will I fully apply it next time? 100%</p>
     </div>
   </article>
 
@@ -287,25 +285,25 @@
     <div class="post-body" id="p3">
       <p>I've been watching the AI in security tooling space pretty closely and I want to give an honest take on where things actually are, because where they are and where people think they are is pretty different right now.</p>
 
-      <p>Starting with what exists. Burp added Burp AI in early 2025 and I've used it some. The features that shipped are genuinely useful but pretty targeted — better false positive reduction on access control findings, AI-assisted analysis in Repeater, the ability to build AI-powered extensions through the Montoya API. It's not autonomous. It's not doing the testing for you. It makes some of the annoying parts of the workflow a little less annoying. The FP reduction on access control stuff is actually helpful because that's historically been noisy. But it runs on credits that expire, can't be pooled across users, and burns depending on request complexity. More of a quality of life improvement on a tool you're already using than some kind of shift.</p>
+      <p>I'll start with what exists. Burp added Burp AI in early 2025 and I've used it some. The features that shipped are genuinely useful but pretty targeted and I will be honest, not really applicable to my daily use, though repeater can do some neat things. It's not autonomous. It's not doing the testing for you. It makes some of the annoying parts of the workflow a little less annoying. The FP reduction on access control stuff is actually helpful because that's historically been noisy. But as with all agentic problems right not it rusn on tokens that expire, can't be pooled across users, and burns depending on request complexity. More of a quality of life improvement on a tool you're already using than some kind of shift.</p>
 
-      <p>There are also actual autonomous pentesting agents now. PentAGI, NodeZero, a bunch of research papers out of universities doing LLM-based pentest agents. Some of these are doing real things — running enum, correlating findings with CVE databases, generating and testing payloads, writing reports. The research in this space moved fast in 2025. But when you look at where they do well versus where they fall apart, the gap is pretty clear: they're good at known vuln classes in environments that look like the training data, and they lose the thread fast when an application has any real custom logic going on.</p>
+      <p>There are also actual autonomous pentesting agents now like NodeZero and Pentera (have used both and they have their own problems but are a step in the direction). Overall these tools are doing all the pentesting things: running enum, generating and testing payloads, writing reports. The research in this space moved fast in 2026. But when you look at where they do well versus where they fall apart, the gap is pretty clear: they're good at known vuln classes in environments that look like the training data, and they lose the thread fast when an application has any real custom logic going on.</p>
 
       <blockquote>The hard part of pentesting isn't finding SQL injections. It's understanding how this specific app thinks about authorization and then figuring out how to break that.</blockquote>
 
-      <h3>What the frontier models suggest is coming</h3>
+      <h3>What the models suggest is coming (It's not that scary imo)</h3>
 
-      <p>I can't say a ton about Claude Mythos specifically — it's not public, it's being used by a small group of trusted orgs through Anthropic's Project Glasswing and the details aren't really out there. But what the frontier models in general are showing is that the reasoning gap is closing faster than most people expected. Models are getting noticeably better at multi-step reasoning, holding complex context across a session, and doing things that actually require understanding how a system works rather than just matching to known vulnerability patterns.</p>
+      <p>I can't say a ton about Claude Mythos specifically but I have heard the hype and its potential. But I will say in general what these guys are showing is that the reasoning gap is closing faster than most people expected. Models are getting noticeably better at multi-step reasoning, holding complex context across a session, and doing things that actually require understanding how a system works rather than just matching to known vulnerability patterns.</p>
 
-      <p>That matters for DAST specifically because the current ceiling on automated security testing is basically "can it reason about application logic." Scanners are good at finding known patterns. They are not good at figuring out that this endpoint is supposed to be admin-only and then actually testing all the ways a regular user might reach it. That requires understanding intent, not just signatures. Better reasoning models change that equation.</p>
+      <p>That matters for DAST specifically because the current ceiling on automated security testing is basically "can it reason about application logic." Scanners are good at finding known patterns. They are not good at figuring out that this endpoint is supposed to be admin only and then actually testing all the ways a regular user might reach it. That requires understanding application intent, not just signatures. Better reasoning models change that equation.</p>
 
       <h3>What I think actually happens</h3>
 
-      <p>My honest take: AI handles the coverage and volume work pretty well in the next couple years. Automated crawling, auth flow handling, common vuln class coverage — the stuff that's tedious and time-consuming but not where the interesting findings come from anyway. The stuff that takes longer to automate than people are predicting is business logic testing, creative chaining of low-severity findings into something actually critical, and understanding what a finding means in a specific client's context.</p>
+      <p>My honest take: AI handles the coverage and volume work pretty well in the next couple years. Automated crawling, auth flow handling, common vuln class coverage. This is all the tedious thinngs but not the meat and potatoes. The stuff that takes longer to automate than people are predicting is business logic testing, creative chaining of low-severity findings into something actually critical (OSWE teaches this well), and ultimately understanding what a finding means in a specific app's context.</p>
 
-      <p>The people who are going to feel this first are the ones whose whole value is running scanners and writing up the output. That's getting automated. The ones who do fine are probably the ones who can do the thing AI still can't — actually understand the system, ask the weird questions, figure out what the developers were thinking when they built the auth flow and where that thinking went wrong.</p>
+      <p>The people who are going to feel this first are the ones whose whole value is running scanners and writing up the output. That's getting automated. The ones who do fine are probably the ones who can do the thing AI still can't. The ones who actually understand the system, ask the weird questions, figure out what the developers were thinking when they built the auth flow and where that thinking went wrong.</p>
 
-      <p>The more interesting question to me is what happens when AI gets good enough to do authenticated testing reliably and actually model authorization logic across a whole application. Because at that point the line between automated DAST and autonomous pentesting gets pretty blurry. Whether that's one year or five years away, I don't know. But the direction seems pretty obvious from where I'm sitting.</p>
+      <p>The more interesting question to me is what happens when AI gets good enough to do authenticated testing reliably and actually model authorization logic across a whole application. Because at that point the line between automated DAST and autonomous pentesting gets pretty blurry. Whether that's one year or five years away, I don't know. But I will say I am excited to see where this journey takes us.</p>
     </div>
   </article>
 
